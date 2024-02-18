@@ -4,7 +4,7 @@
 
 TestFlex is a dependency inversion layer for your unit test code. Write your code with TestFlex, then use any test runner you want.
 
-## The idea
+## The idea
 
 Running Jest but want to try Bun? Maybe the Node.js test runner? What happens when Jest falls out of favour and we need to move away from it? jQuery was the best way to build websites, then Angular, then React, then Vue, then Solid, then Vite, then _whatever else_. You get the idea - things change, so tying ourselves to a single implementation or tool is perhaps not the best idea.
 
@@ -32,14 +32,35 @@ I appreciate the irony in me recommending tying yourselves to TestFlex! But it's
 
 When I say module mocking, I'm referring to something like this (contrived) example using Jest;
 
-```ts
+```js
 // Mock the whole file, not just the function
+import math from './math';
+
 jest.mock('./math', () => ({
   add: jest.fn().mockImplementation((a, b) => {
     return a + b;
   })
 })
+
+it('should add', () => {
+  expect(math.add).toHaveBeenCalled();
+  expect(math.add(1,2)).toEqual(3);
+});
+
+// Rather than mocking/spying on the individual function
+import math from './math';
+
+spyOn(math, 'add', (a, b) => {
+  return a + b;
+});
+
+it('should add', () => {
+  expect(math.add).toHaveBeenCalled();
+  expect(math.add(1,2)).toEqual(3);
+});
 ```
+
+This mocking of the whole module means that other systems that import the same module also share the same mock.
 
 It looks like you can mock `require` statements fairly easily with tools like [cjs-mock](https://www.npmjs.com/package/cjs-mock) or [proxyquire](https://www.npmjs.com/package/proxyquire), but `import` statements are harder. I think there is something in the ES specification that states that `import`s should be immutable, which makes mocking out the whole module "difficult".
 
