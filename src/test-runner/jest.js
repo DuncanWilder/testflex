@@ -1,7 +1,4 @@
-import path from 'node:path';
 import { it, expect, describe, jest } from '@jest/globals';
-
-export { it, expect, describe };
 
 export default class JestTester {
   it = it;

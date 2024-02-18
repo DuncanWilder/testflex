@@ -1,7 +1,5 @@
 import { it, expect, describe, spyOn, mock } from 'bun:test';
 
-export { it, expect, describe };
-
 export default class BunTester {
   it = it;
 
