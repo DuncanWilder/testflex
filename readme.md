@@ -8,17 +8,17 @@ TestFlex is a dependency inversion layer for your unit test code. Write your cod
 
 Running Jest but want to try Bun? Maybe the Node.js test runner? What happens when Jest falls out of favour and we need to move away from it? jQuery was the best way to build websites, then Angular, then React, then Vue, then Solid, then Vite, then _whatever else_. You get the idea - things change, so tying ourselves to a single implementation or tool is perhaps not the best idea.
 
-There is irony in tying yourselves to TestFlex! But it's less about the tool and perhaps more about the design pattern. If we depend on an abstraction layer rather than a concrete implementation, we can keep ourselves more flexible to changes in the future.
+I appreciate the irony in me recommending tying yourselves to TestFlex! But it's less about the tool and perhaps more about the design pattern. If we depend on an abstraction layer rather than a concrete implementation, we can keep ourselves more flexible to changes in the future.
 
 ## Test runners and some notes on them
 
-| Test runner                                                                 | it  | describe                                               | global expect (not via `it`)               | mocking (e.g. spies/function mocks)        | ESM `import` mocking                                                                                                                                                              |
+| Test runner                                                                 | it  | describe                                               | global expect (not via `it`)               | mocking (e.g. spies/function mocks)        | ESM module mocking                                                                                                                                                                |
 | --------------------------------------------------------------------------- | --- | ------------------------------------------------------ | ------------------------------------------ | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Jest](https://www.npmjs.com/package/jest)                                  | ✅  | ✅                                                     | ✅                                         | ✅                                         | ✅                                                                                                                                                                                |
 | [Bun](https://bun.sh/docs/cli/test)                                         | ✅  | ✅                                                     | ✅                                         | ✅                                         | ✅                                                                                                                                                                                |
 | [Node test runner](https://nodejs.org/api/test.html)                        | ✅  | ✅                                                     | ✅                                         | ✅                                         | ❌ Not supported, but something might be in the works.                                                                                                                            |
 | [AVA](https://www.npmjs.com/package/ava)                                    | ✅  | ❌ Must be flat structure, no nesting of tests allowed | ❌ Must use one passed in via `it`         | ✅                                         | ❌                                                                                                                                                                                |
-| [Vitest](https://vitest.dev)                                                | ✅  | ✅                                                     | ✅                                         | ✅                                         | ⚠️ Yes, with caveats                                                                                                                                                              |
+| [Vitest](https://vitest.dev)                                                | ✅  | ✅                                                     | ✅                                         | ✅                                         | ✅                                                                                                                                                                                |
 | [Mocha](https://www.npmjs.com/package/mocha)                                | ✅  | ✅                                                     | ⚠️ Not built in, must use external library | ⚠️ Not built in, must use external library | ❌                                                                                                                                                                                |
 | [Jasmine](https://www.npmjs.com/package/jasmine)                            | ✅  | ✅                                                     | ✅                                         | ✅                                         | ⚠️ [It might be possible](https://jasmine.github.io/tutorials/module_mocking#es-modules-in-node-using-testdoublejs) using [testdouble](https://www.npmjs.com/package/testdouble)? |
 | [Supertape](https://www.npmjs.com/package/supertape)                        | ✅  | ❌ Must be flat structure, no nesting of tests allowed | ❌ Must use one passed in via `it`         | ⚠️ Not built in, must use external library | ⚠️ Yes, with [mock-import](https://www.npmjs.com/package/mock-import)                                                                                                             |
@@ -28,9 +28,9 @@ There is irony in tying yourselves to TestFlex! But it's less about the tool and
 
 ### Learnings from these investigations
 
-#### `import` mocking is hard, particularly with ESM
+#### ESM module mocking is hard, particularly with ESM
 
-When I say import mocking, I'm referring to something like this (contrived) example using Jest;
+When I say module mocking, I'm referring to something like this (contrived) example using Jest;
 
 ```ts
 // Mock the whole file, not just the function
